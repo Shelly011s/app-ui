@@ -12,7 +12,38 @@ import {
 import { CanvasWidget } from '@projectstorm/react-canvas-core';
 
 export default BasicConnection = () => {
-  
+    const postURL = "http://localhost:4000/" //Our previously set up route in the backend
+    
+    fetch(postURL, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ // We should keep the fields consistent for managing this data later
+            "components": [
+                {
+                    "id": "c1",      // unique identifier for first box created
+                    "name": "Source", // name of the box/component
+                },
+                {
+                    "id": "c2",
+                    "name": "Destination"
+                }
+            ],
+            "links": [
+                {
+                    "src": "c1",    // source of the link
+                    "dest": "c2"    // destination
+                }
+            ]               
+        })
+    })
+    .then(()=>{
+        // Once posted, the user will be notified 
+        alert('You have been added to the system!');
+    })
+
     enableDrag = () => {
 		const { engine } = this.props;
 		const state = engine.getStateMachine().getCurrentState();
@@ -54,11 +85,10 @@ export default BasicConnection = () => {
     offsetUpdated: e => console.log("offsetUpdated", e),
     entityRemoved: e => console.log("entityRemoved", e),
     selectionChanged: e => console.log("selectionChanged", e)
-});
+  });
   
   engine.setDiagramModel(model);
-
- 
+   
   return (
   <>
   <button key={1} onClick={this.enableDrag}>Enable canvas drag</button>	                  
@@ -66,7 +96,7 @@ export default BasicConnection = () => {
   <CanvasWidget className="srd--canvas" diagramEngine={engine} />
   </>
   );
-};
 
+};
 
 
